@@ -10,21 +10,21 @@ import { Badge } from '@/components/ui/badge';
 const Community = () => {
   const topContributors = [
     {
-      name: 'Dr. Maria Rossi',
+      name: '*******',
       title: 'Stone Archaeologist',
       contributions: 234,
       speciality: 'Roman Architecture',
       avatar: '/placeholder-avatar-1.jpg'
     },
     {
-      name: 'Jean-Pierre Dubois',
+      name: '****',
       title: 'Quarry Master',
       contributions: 187,
       speciality: 'Limestone Extraction',
       avatar: '/placeholder-avatar-2.jpg'
     },
     {
-      name: 'Emma Thompson',
+      name: '****',
       title: 'Stone Conservator',
       contributions: 156,
       speciality: 'Medieval Restoration',
@@ -35,21 +35,21 @@ const Community = () => {
   const discussions = [
     {
       title: 'Best practices for marble restoration in humid climates',
-      author: 'Dr. Sarah Chen',
+      author: '**********',
       replies: 23,
       lastActivity: '2 hours ago',
       category: 'Conservation'
     },
     {
       title: 'Identifying stone types in Gothic cathedrals',
-      author: 'Prof. Antonio Vecchi',
+      author: '********',
       replies: 41,
       lastActivity: '4 hours ago',
       category: 'Architecture'
     },
     {
       title: 'Modern quarrying techniques vs traditional methods',
-      author: 'Mike Johnson',
+      author: '********',
       replies: 17,
       lastActivity: '6 hours ago',
       category: 'Industry'
