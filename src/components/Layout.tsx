@@ -1,9 +1,8 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MapPin, Search, User, Users, Building2 } from 'lucide-react';
+import { MapPin, Search, User, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AuthModal from '@/components/AuthModal';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,7 +15,6 @@ const Layout = ({ children }: LayoutProps) => {
   const navItems = [
     { path: '/', icon: MapPin, label: 'Map' },
     { path: '/search', icon: Search, label: 'Search' },
-    { path: '/business', icon: Building2, label: 'Business' },
     { path: '/profile', icon: User, label: 'Profile' },
     { path: '/community', icon: Users, label: 'Community' }
   ];
@@ -56,13 +54,9 @@ const Layout = ({ children }: LayoutProps) => {
               })}
             </nav>
 
-            <AuthModal
-              trigger={
-                <Button variant="outline" className="hidden md:flex">
-                  Sign In
-                </Button>
-              }
-            />
+            <Button variant="outline" className="hidden md:flex">
+              Sign In
+            </Button>
           </div>
         </div>
       </header>
