@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MapPin, Search, User, Users, Building2, Bot } from 'lucide-react';
+import { MapPin, Search, User, Users, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AuthModal from '@/components/AuthModal';
 
@@ -17,7 +17,6 @@ const Layout = ({ children }: LayoutProps) => {
     { path: '/', icon: MapPin, label: 'Map' },
     { path: '/search', icon: Search, label: 'Search' },
     { path: '/business', icon: Building2, label: 'Business' },
-    { path: '/ai-chat', icon: Bot, label: 'AI Chat' },
     { path: '/profile', icon: User, label: 'Profile' },
     { path: '/community', icon: Users, label: 'Community' }
   ];
