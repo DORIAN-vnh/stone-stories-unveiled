@@ -1,215 +1,189 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '@/components/Layout';
-import ContributionForm from '@/components/ContributionForm';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { MapPin, Camera, BookOpen, Award, Settings } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Plus, FileText, MapPin, Clock, CheckCircle, XCircle, Eye } from 'lucide-react';
-
-interface Contribution {
-  id: string;
-  name: string;
-  type: 'monument' | 'quarry' | 'marble' | 'company';
-  status: 'pending' | 'approved' | 'rejected';
-  submitDate: string;
-  location?: string;
-}
-
-const mockContributions: Contribution[] = [
-  {
-    id: '1',
-    name: 'Notre-Dame Cathedral Stone Analysis',
-    type: 'monument',
-    status: 'approved',
-    submitDate: '2024-01-15',
-    location: 'Paris, France'
-  },
-  {
-    id: '2',
-    name: 'Vermont Marble Quarry Documentation',
-    type: 'quarry',
-    status: 'pending',
-    submitDate: '2024-01-10',
-    location: 'Vermont, USA'
-  },
-  {
-    id: '3',
-    name: 'Rosso Verona Marble Properties',
-    type: 'marble',
-    status: 'rejected',
-    submitDate: '2024-01-05',
-    location: 'Verona, Italy'
-  }
-];
+import { Badge } from '@/components/ui/badge';
 
 const Profile = () => {
-  const [showContributionForm, setShowContributionForm] = useState(false);
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'rejected':
-        return <XCircle className="w-4 h-4 text-red-500" />;
-      default:
-        return <Clock className="w-4 h-4 text-yellow-500" />;
-    }
+  // Sample user data
+  const user = {
+    name: 'Dr. Elena Marchetti',
+    title: 'Stone Heritage Archaeologist',
+    location: 'Florence, Italy',
+    bio: 'Passionate about preserving our stone heritage. Specializing in Renaissance marble work and Roman construction techniques. Contributing to the global understanding of historical stone craftsmanship.',
+    joinDate: 'March 2023',
+    stats: {
+      discoveries: 47,
+      articles: 23,
+      contributions: 156,
+      followers: 892
+    },
+    expertise: ['Roman Architecture', 'Marble Analysis', 'Stone Conservation', 'Archaeological Documentation'],
+    recentActivity: [
+      {
+        type: 'discovery',
+        title: 'Byzantine Capital Fragment',
+        location: 'Ravenna, Italy',
+        date: '2 days ago'
+      },
+      {
+        type: 'article',
+        title: 'Techniques for Marble Patina Analysis',
+        date: '1 week ago'
+      },
+      {
+        type: 'contribution',
+        title: 'Updated Carrara Quarry Records',
+        date: '2 weeks ago'
+      }
+    ]
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-800';
-      case 'rejected':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-yellow-100 text-yellow-800';
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'discovery': return <MapPin className="w-4 h-4" />;
+      case 'article': return <BookOpen className="w-4 h-4" />;
+      case 'contribution': return <Camera className="w-4 h-4" />;
+      default: return <MapPin className="w-4 h-4" />;
     }
   };
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Profile Header */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              <Avatar className="w-16 h-16">
-                <AvatarImage src="/placeholder.svg" alt="Profile" />
-                <AvatarFallback>
-                  <User className="w-8 h-8" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="space-y-2">
-                <CardTitle className="text-2xl">Stone Researcher</CardTitle>
-                <CardDescription>
-                  Historical stone materials enthusiast and contributor since January 2024
-                </CardDescription>
-                <div className="flex gap-4 text-sm text-stone-600">
-                  <span>{mockContributions.length} Contributions</span>
-                  <span>{mockContributions.filter(c => c.status === 'approved').length} Approved</span>
-                  <span>Member since Jan 2024</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Profile Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Profile Card */}
+            <Card>
+              <CardContent className="p-6 text-center">
+                <Avatar className="w-24 h-24 mx-auto mb-4">
+                  <AvatarImage src="/placeholder-avatar.jpg" />
+                  <AvatarFallback className="bg-stone-200 text-stone-700 text-2xl">
+                    EM
+                  </AvatarFallback>
+                </Avatar>
+                
+                <h1 className="text-2xl font-bold text-stone-800 mb-1">{user.name}</h1>
+                <p className="text-stone-600 mb-2">{user.title}</p>
+                <div className="flex items-center justify-center space-x-1 text-stone-500 mb-4">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm">{user.location}</span>
                 </div>
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
+                
+                <p className="text-sm text-stone-600 leading-relaxed mb-4">{user.bio}</p>
+                
+                <div className="text-xs text-stone-500 mb-4">
+                  Member since {user.joinDate}
+                </div>
 
-        {/* Main Content */}
-        <Tabs defaultValue="contributions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="contributions">My Contributions</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-          </TabsList>
+                <Button className="w-full mb-2">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Edit Profile
+                </Button>
+              </CardContent>
+            </Card>
 
-          <TabsContent value="contributions" className="space-y-6">
-            {/* Add Contribution Button */}
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-semibold">My Contributions</h2>
-                <p className="text-stone-600">Track and manage your submissions to the platform</p>
-              </div>
-              <Dialog open={showContributionForm} onOpenChange={setShowContributionForm}>
-                <DialogTrigger asChild>
-                  <Button className="flex items-center gap-2">
-                    <Plus className="w-4 h-4" />
-                    New Contribution
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>Submit New Contribution</DialogTitle>
-                  </DialogHeader>
-                  <ContributionForm onClose={() => setShowContributionForm(false)} />
-                </DialogContent>
-              </Dialog>
-            </div>
+            {/* Stats Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Statistics</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-quarry-600">{user.stats.discoveries}</div>
+                    <div className="text-xs text-stone-500">Discoveries</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-stone-600">{user.stats.articles}</div>
+                    <div className="text-xs text-stone-500">Articles</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-stone-700">{user.stats.contributions}</div>
+                    <div className="text-xs text-stone-500">Contributions</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-stone-800">{user.stats.followers}</div>
+                    <div className="text-xs text-stone-500">Followers</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-            {/* Contributions List */}
-            <div className="space-y-4">
-              {mockContributions.map(contribution => (
-                <Card key={contribution.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <FileText className="w-4 h-4" />
-                          <Badge variant="outline" className="capitalize">
-                            {contribution.type}
-                          </Badge>
-                          <Badge className={getStatusColor(contribution.status)}>
-                            <div className="flex items-center gap-1">
-                              {getStatusIcon(contribution.status)}
-                              <span className="capitalize">{contribution.status}</span>
-                            </div>
-                          </Badge>
-                        </div>
-                        <CardTitle className="text-lg">{contribution.name}</CardTitle>
-                        {contribution.location && (
-                          <div className="flex items-center gap-1 text-sm text-stone-600">
-                            <MapPin className="w-3 h-3" />
-                            {contribution.location}
-                          </div>
-                        )}
+            {/* Expertise Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <Award className="w-5 h-5 mr-2" />
+                  Expertise
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <div className="space-y-2">
+                  {user.expertise.map((skill, index) => (
+                    <Badge key={index} variant="secondary" className="mr-2 mb-2">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Recent Activity */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">Recent Activity</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <div className="space-y-4">
+                  {user.recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-4 rounded-lg hover:bg-stone-50 transition-colors">
+                      <div className={`p-2 rounded-full ${
+                        activity.type === 'discovery' ? 'bg-quarry-100 text-quarry-600' :
+                        activity.type === 'article' ? 'bg-stone-100 text-stone-600' :
+                        'bg-marble-100 text-stone-600'
+                      }`}>
+                        {getActivityIcon(activity.type)}
                       </div>
-                      <Button variant="ghost" size="sm">
-                        <Eye className="w-4 h-4" />
-                      </Button>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-stone-800">{activity.title}</h3>
+                        {activity.location && (
+                          <p className="text-sm text-stone-500 flex items-center mt-1">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            {activity.location}
+                          </p>
+                        )}
+                        <p className="text-xs text-stone-400 mt-1">{activity.date}</p>
+                      </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between text-sm text-stone-500">
-                      <span>Submitted on {new Date(contribution.submitDate).toLocaleDateString()}</span>
-                      {contribution.status === 'pending' && (
-                        <span className="text-yellow-600">Under review</span>
-                      )}
-                      {contribution.status === 'rejected' && (
-                        <Button variant="ghost" size="sm" className="text-blue-600">
-                          View Feedback
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-            {mockContributions.length === 0 && (
-              <div className="text-center py-12">
-                <FileText className="w-12 h-12 text-stone-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-stone-600 mb-2">No contributions yet</h3>
-                <p className="text-stone-500 mb-4">
-                  Start contributing to our stone materials database!
-                </p>
-                <Dialog open={showContributionForm} onOpenChange={setShowContributionForm}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Submit Your First Contribution
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>Submit New Contribution</DialogTitle>
-                    </DialogHeader>
-                    <ContributionForm onClose={() => setShowContributionForm(false)} />
-                  </DialogContent>
-                </Dialog>
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="activity">
-            <div className="text-center py-12 text-stone-500">
-              <Clock className="w-12 h-12 mx-auto mb-4 text-stone-300" />
-              <p>Your activity history will appear here.</p>
-            </div>
-          </TabsContent>
-        </Tabs>
+            {/* Placeholder for future content */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">My Contributions</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <div className="text-center py-12">
+                  <div className="text-4xl text-stone-300 mb-4">📚</div>
+                  <h3 className="text-lg font-medium text-stone-700 mb-2">Your contributions will appear here</h3>
+                  <p className="text-stone-500 mb-4">Share discoveries, write articles, and upload photos to build your portfolio.</p>
+                  <Button>Start Contributing</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </Layout>
   );
