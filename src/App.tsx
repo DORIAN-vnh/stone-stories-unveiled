@@ -9,6 +9,7 @@ import Search from "./pages/Search";
 import Business from "./pages/Business";
 import Profile from "./pages/Profile";
 import Community from "./pages/Community";
+import AiChat from "./pages/AiChat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/business" element={<Business />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/ai-chat" element={<AiChat />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
