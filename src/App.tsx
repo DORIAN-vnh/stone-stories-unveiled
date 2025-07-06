@@ -12,6 +12,10 @@ import Community from "./pages/Community";
 import Business from "./pages/Business";
 import AiChat from "./pages/AiChat";
 import Admin from "./pages/Admin";
+import Company from "./pages/Company";
+import Monument from "./pages/Monument";
+import Quarry from "./pages/Quarry";
+import Marble from "./pages/Marble";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +35,10 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/community" element={<Community />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/company/:id" element={<Company />} />
+            <Route path="/monument/:id" element={<Monument />} />
+            <Route path="/quarry/:id" element={<Quarry />} />
+            <Route path="/marble/:id" element={<Marble />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

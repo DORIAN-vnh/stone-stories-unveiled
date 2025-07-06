@@ -1,11 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Link } from 'react-router-dom';
 import L from 'leaflet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Mountain, Building2, Gem } from 'lucide-react';
+import { MapPin, Mountain, Building2, Gem, ExternalLink } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import 'leaflet/dist/leaflet.css';
 
 // Fix for default markers in react-leaflet
@@ -96,10 +98,15 @@ const getColorForType = (type: string) => {
 const InteractiveMap = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [filter, setFilter] = useState<string>('all');
+  const { user } = useAuth();
 
   const filteredLocations = mockLocations.filter(location => 
     filter === 'all' || location.type === filter
   );
+
+  const getPagePath = (location: Location) => {
+    return `/${location.type}/${location.id}`;
+  };
 
   return (
     <div className="relative w-full h-full">
@@ -177,6 +184,17 @@ const InteractiveMap = () => {
                 {location.material && (
                   <p className="text-sm mt-1"><strong>Material:</strong> {location.material}</p>
                 )}
+                {user && (
+                  <Link to={getPagePath(location)} className="inline-block mt-2">
+                    <Button size="sm" className="text-xs">
+                      View Details
+                      <ExternalLink className="w-3 h-3 ml-1" />
+                    </Button>
+                  </Link>
+                )}
+                {!user && (
+                  <p className="text-xs text-gray-500 mt-2">Sign in to view details</p>
+                )}
               </div>
             </Popup>
           </Marker>
@@ -203,10 +221,26 @@ const InteractiveMap = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-stone-600">{selectedLocation.description}</p>
+              <p className="text-sm text-stone-600 mb-3">{selectedLocation.description}</p>
               {selectedLocation.material && (
-                <p className="text-sm mt-2"><strong>Material:</strong> {selectedLocation.material}</p>
+                <p className="text-sm mb-3"><strong>Material:</strong> {selectedLocation.material}</p>
               )}
+              <div className="flex gap-2">
+                {user ? (
+                  <Link to={getPagePath(selectedLocation)}>
+                    <Button size="sm">
+                      View Full Details
+                      <ExternalLink className="w-4 h-4 ml-1" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <div>
+                    <Button size="sm" disabled className="mr-2">
+                      Sign in to View Details
+                    </Button>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
