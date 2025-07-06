@@ -16,6 +16,12 @@ import Company from "./pages/Company";
 import Monument from "./pages/Monument";
 import Quarry from "./pages/Quarry";
 import Marble from "./pages/Marble";
+import SignIn from "./pages/SignIn";
+import Register from "./pages/Register";
+import Discussions from "./pages/Discussions";
+import Events from "./pages/Events";
+import Contributors from "./pages/Contributors";
+import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +45,12 @@ const App = () => (
             <Route path="/monument/:id" element={<Monument />} />
             <Route path="/quarry/:id" element={<Quarry />} />
             <Route path="/marble/:id" element={<Marble />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/discussions" element={<Discussions />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/contributors" element={<Contributors />} />
+            <Route path="/post/:id" element={<PostDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

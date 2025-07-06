@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Users, Award, MessageCircle, Calendar, TrendingUp } from 'lucide-react';
@@ -6,25 +5,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
 
 const Community = () => {
   const topContributors = [
     {
-      name: '*******',
+      name: 'Dr. Elena Rodriguez',
       title: 'Stone Archaeologist',
       contributions: 234,
       speciality: 'Roman Architecture',
       avatar: '/placeholder-avatar-1.jpg'
     },
     {
-      name: '****',
+      name: 'Prof. James Mitchell',
       title: 'Quarry Master',
       contributions: 187,
       speciality: 'Limestone Extraction',
       avatar: '/placeholder-avatar-2.jpg'
     },
     {
-      name: '****',
+      name: 'Dr. Sophia Chen',
       title: 'Stone Conservator',
       contributions: 156,
       speciality: 'Medieval Restoration',
@@ -35,21 +35,21 @@ const Community = () => {
   const discussions = [
     {
       title: 'Best practices for marble restoration in humid climates',
-      author: '**********',
+      author: 'Dr. Maria Santos',
       replies: 23,
       lastActivity: '2 hours ago',
       category: 'Conservation'
     },
     {
       title: 'Identifying stone types in Gothic cathedrals',
-      author: '********',
+      author: 'Prof. James Wilson',
       replies: 41,
       lastActivity: '4 hours ago',
       category: 'Architecture'
     },
     {
       title: 'Modern quarrying techniques vs traditional methods',
-      author: '********',
+      author: 'Mike Rodriguez',
       replies: 17,
       lastActivity: '6 hours ago',
       category: 'Industry'
@@ -107,9 +107,12 @@ const Community = () => {
                   {discussions.map((discussion, index) => (
                     <div key={index} className="border-b border-stone-100 last:border-b-0 pb-4 last:pb-0">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-medium text-stone-800 flex-1 cursor-pointer hover:text-quarry-600 transition-colors">
+                        <Link 
+                          to="/discussions"
+                          className="font-medium text-stone-800 flex-1 cursor-pointer hover:text-quarry-600 transition-colors"
+                        >
                           {discussion.title}
-                        </h3>
+                        </Link>
                         <Badge variant="outline" className="ml-2">
                           {discussion.category}
                         </Badge>
@@ -125,7 +128,9 @@ const Community = () => {
                   ))}
                 </div>
                 <div className="mt-6">
-                  <Button className="w-full">View All Discussions</Button>
+                  <Link to="/discussions">
+                    <Button className="w-full">View All Discussions</Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -146,7 +151,9 @@ const Community = () => {
                         <Calendar className="w-5 h-5 text-quarry-600" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-medium text-stone-800">{event.title}</h3>
+                        <Link to="/events" className="font-medium text-stone-800 hover:text-quarry-600 transition-colors">
+                          {event.title}
+                        </Link>
                         <p className="text-sm text-stone-500">{event.location}</p>
                         <div className="flex items-center space-x-2 mt-1">
                           <Badge variant="secondary" className="text-xs">
@@ -159,7 +166,9 @@ const Community = () => {
                   ))}
                 </div>
                 <div className="mt-6">
-                  <Button variant="outline" className="w-full">See All Events</Button>
+                  <Link to="/events">
+                    <Button variant="outline" className="w-full">See All Events</Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -238,7 +247,9 @@ const Community = () => {
                   ))}
                 </div>
                 <div className="mt-6">
-                  <Button variant="outline" className="w-full">View All Contributors</Button>
+                  <Link to="/contributors">
+                    <Button variant="outline" className="w-full">View All Contributors</Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -251,9 +262,11 @@ const Community = () => {
                 <p className="text-stone-600 text-sm mb-4">
                   Connect with experts, share your knowledge, and learn from the global stone heritage community.
                 </p>
-                <Button className="w-full bg-quarry-600 hover:bg-quarry-700">
-                  Become a Member
-                </Button>
+                <Link to="/register">
+                  <Button className="w-full bg-quarry-600 hover:bg-quarry-700">
+                    Become a Member
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

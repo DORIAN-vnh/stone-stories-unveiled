@@ -77,7 +77,7 @@ const Layout = ({ children }: LayoutProps) => {
                     {isAdmin && <Shield className="w-4 h-4 text-blue-600" />}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="bg-white">
                   <DropdownMenuLabel>
                     {user.name}
                     {isAdmin && <div className="text-xs text-blue-600">Administrator</div>}
@@ -105,9 +105,11 @@ const Layout = ({ children }: LayoutProps) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button variant="outline">
-                Sign In
-              </Button>
+              <Link to="/signin">
+                <Button variant="outline">
+                  Sign In
+                </Button>
+              </Link>
             )}
           </div>
         </div>
@@ -118,29 +120,31 @@ const Layout = ({ children }: LayoutProps) => {
         {children}
       </main>
 
-      {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-2 py-2">
-        <div className="flex justify-around">
-          {navItems.slice(0, 5).map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPath === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors min-w-0 ${
-                  isActive
-                    ? 'text-stone-800'
-                    : 'text-stone-500'
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-stone-800' : 'text-stone-500'}`} />
-                <span className="text-xs font-medium truncate">{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      {/* Mobile Bottom Navigation - Only show if user is logged in */}
+      {user && (
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-2 py-2">
+          <div className="flex justify-around">
+            {navItems.slice(0, 5).map((item) => {
+              const Icon = item.icon;
+              const isActive = currentPath === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors min-w-0 ${
+                    isActive
+                      ? 'text-stone-800'
+                      : 'text-stone-500'
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-stone-800' : 'text-stone-500'}`} />
+                  <span className="text-xs font-medium truncate">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
     </div>
   );
 };
