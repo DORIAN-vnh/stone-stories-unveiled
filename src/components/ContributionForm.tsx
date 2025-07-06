@@ -1,238 +1,223 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Upload, MapPin, FileText, Image as ImageIcon } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { MapPin, Upload, X } from 'lucide-react';
 
 interface ContributionFormProps {
-  onClose?: () => void;
+  onClose: () => void;
 }
 
-const ContributionForm = ({ onClose }: ContributionFormProps) => {
+const ContributionForm: React.FC<ContributionFormProps> = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     type: '',
-    description: '',
     location: '',
-    material: '',
+    description: '',
+    materials: '',
     era: '',
-    latitude: '',
-    longitude: '',
-    images: [] as File[]
+    architect: '',
+    images: [] as string[]
   });
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [currentTag, setCurrentTag] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simulate form submission
-    toast({
-      title: "Contribution Submitted",
-      description: "Your submission has been received and will be reviewed by our team.",
-    });
-
-    // Reset form
-    setFormData({
-      name: '',
-      type: '',
-      description: '',
-      location: '',
-      material: '',
-      era: '',
-      latitude: '',
-      longitude: '',
-      images: []
-    });
-
-    if (onClose) onClose();
+    console.log('Submitting contribution:', formData, tags);
+    // Here you would normally send the data to your backend
+    onClose();
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setFormData(prev => ({
-      ...prev,
-      images: [...prev.images, ...files]
-    }));
+  const addTag = () => {
+    if (currentTag.trim() && !tags.includes(currentTag.trim())) {
+      setTags([...tags, currentTag.trim()]);
+      setCurrentTag('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="w-5 h-5" />
-          Submit New Contribution
-        </CardTitle>
-        <CardDescription>
-          Help expand our database of historical stone materials and locations
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Information */}
-          <div className="space-y-4">
-            <div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Basic Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Basic Information</CardTitle>
+          <CardDescription>
+            Provide the fundamental details about your contribution
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
               <Label htmlFor="name">Name *</Label>
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Monument, quarry, or location name"
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                placeholder="e.g., Notre-Dame Cathedral"
                 required
               />
             </div>
-
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="type">Type *</Label>
-              <Select value={formData.type} onValueChange={(value) => setFormData(prev => ({ ...prev, type: value }))}>
+              <Select value={formData.type} onValueChange={(value) => handleInputChange('type', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="monument">Monument</SelectItem>
                   <SelectItem value="quarry">Quarry</SelectItem>
-                  <SelectItem value="marble">Marble Variety</SelectItem>
+                  <SelectItem value="marble">Marble Type</SelectItem>
                   <SelectItem value="company">Company</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
-            <div>
-              <Label htmlFor="description">Description *</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Detailed description of the location or material"
-                required
-                rows={4}
-              />
-            </div>
           </div>
-
-          {/* Location Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Location Details
-            </h3>
-            
-            <div>
-              <Label htmlFor="location">Address/Location</Label>
+          
+          <div className="space-y-2">
+            <Label htmlFor="location">Location *</Label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-3 h-4 w-4 text-stone-400" />
               <Input
                 id="location"
                 value={formData.location}
-                onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                placeholder="City, region, country"
+                onChange={(e) => handleInputChange('location', e.target.value)}
+                placeholder="e.g., Paris, France"
+                className="pl-10"
+                required
               />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="latitude">Latitude</Label>
-                <Input
-                  id="latitude"
-                  type="number"
-                  step="any"
-                  value={formData.latitude}
-                  onChange={(e) => setFormData(prev => ({ ...prev, latitude: e.target.value }))}
-                  placeholder="44.0803"
-                />
-              </div>
-              <div>
-                <Label htmlFor="longitude">Longitude</Label>
-                <Input
-                  id="longitude"
-                  type="number"
-                  step="any"
-                  value={formData.longitude}
-                  onChange={(e) => setFormData(prev => ({ ...prev, longitude: e.target.value }))}
-                  placeholder="10.097"
-                />
-              </div>
             </div>
           </div>
 
-          {/* Material Information */}
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="material">Stone/Material Type</Label>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description *</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) => handleInputChange('description', e.target.value)}
+              placeholder="Provide a detailed description..."
+              rows={4}
+              required
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Detailed Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Detailed Information</CardTitle>
+          <CardDescription>
+            Additional details specific to your contribution type
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="materials">Materials Used</Label>
               <Input
-                id="material"
-                value={formData.material}
-                onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))}
-                placeholder="Carrara marble, granite, limestone, etc."
+                id="materials"
+                value={formData.materials}
+                onChange={(e) => handleInputChange('materials', e.target.value)}
+                placeholder="e.g., Limestone, Marble, Granite"
               />
             </div>
-
-            <div>
-              <Label htmlFor="era">Historical Era/Period</Label>
+            <div className="space-y-2">
+              <Label htmlFor="era">Era/Period</Label>
               <Input
                 id="era"
                 value={formData.era}
-                onChange={(e) => setFormData(prev => ({ ...prev, era: e.target.value }))}
-                placeholder="Roman, Medieval, Renaissance, etc."
+                onChange={(e) => handleInputChange('era', e.target.value)}
+                placeholder="e.g., Medieval (12th century)"
               />
             </div>
           </div>
 
-          {/* Image Upload */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <ImageIcon className="w-5 h-5" />
-              Images
-            </h3>
-            
-            <div className="border-2 border-dashed border-stone-300 rounded-lg p-6 text-center">
-              <Upload className="w-8 h-8 text-stone-400 mx-auto mb-2" />
-              <p className="text-sm text-stone-600 mb-2">
-                Drag and drop images here, or click to select files
-              </p>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-                id="image-upload"
+          <div className="space-y-2">
+            <Label htmlFor="architect">Architect/Builder</Label>
+            <Input
+              id="architect"
+              value={formData.architect}
+              onChange={(e) => handleInputChange('architect', e.target.value)}
+              placeholder="e.g., Unknown, Emperor Hadrian, Christopher Wren"
+            />
+          </div>
+
+          {/* Tags */}
+          <div className="space-y-2">
+            <Label>Tags</Label>
+            <div className="flex gap-2">
+              <Input
+                value={currentTag}
+                onChange={(e) => setCurrentTag(e.target.value)}
+                placeholder="Add a tag..."
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
               />
-              <Button type="button" variant="outline" onClick={() => document.getElementById('image-upload')?.click()}>
-                Choose Files
+              <Button type="button" onClick={addTag} variant="outline">
+                Add
               </Button>
             </div>
-
-            {formData.images.length > 0 && (
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Selected Images:</p>
-                <ul className="text-sm text-stone-600">
-                  {formData.images.map((file, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <ImageIcon className="w-4 h-4" />
-                      {file.name}
-                    </li>
-                  ))}
-                </ul>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+                    {tag}
+                    <X 
+                      className="w-3 h-3 cursor-pointer" 
+                      onClick={() => removeTag(tag)}
+                    />
+                  </Badge>
+                ))}
               </div>
             )}
           </div>
+        </CardContent>
+      </Card>
 
-          {/* Submit Buttons */}
-          <div className="flex gap-3 pt-4">
-            <Button type="submit" className="flex-1">
-              Submit Contribution
+      {/* Images */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Images</CardTitle>
+          <CardDescription>
+            Upload images to support your contribution
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="border-2 border-dashed border-stone-300 rounded-lg p-6 text-center">
+            <Upload className="w-8 h-8 text-stone-400 mx-auto mb-2" />
+            <p className="text-stone-600 mb-2">Drop images here or click to upload</p>
+            <p className="text-sm text-stone-500">PNG, JPG up to 10MB each</p>
+            <Button type="button" variant="outline" className="mt-2">
+              Choose Files
             </Button>
-            {onClose && (
-              <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-            )}
           </div>
-        </form>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+
+      {/* Submit */}
+      <div className="flex justify-end gap-3">
+        <Button type="button" variant="outline" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type="submit">
+          Submit Contribution
+        </Button>
+      </div>
+    </form>
   );
 };
 

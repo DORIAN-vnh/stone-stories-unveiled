@@ -85,16 +85,6 @@ const getIconForType = (type: string) => {
   return iconMap[type as keyof typeof iconMap] || MapPin;
 };
 
-const getColorForType = (type: string) => {
-  const colorMap = {
-    quarry: 'bg-yellow-500',
-    monument: 'bg-blue-500',
-    marble: 'bg-purple-500',
-    company: 'bg-green-500'
-  };
-  return colorMap[type as keyof typeof colorMap] || 'bg-gray-500';
-};
-
 const InteractiveMap = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [filter, setFilter] = useState<string>('all');
@@ -158,7 +148,7 @@ const InteractiveMap = () => {
         </Button>
       </div>
 
-      {/* Real Map */}
+      {/* Map */}
       <MapContainer
         center={[45.0, 10.0]}
         zoom={6}
