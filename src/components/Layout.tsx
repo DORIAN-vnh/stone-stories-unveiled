@@ -1,8 +1,17 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MapPin, Search, User, Users, Calculator, Bot } from 'lucide-react';
+import { MapPin, Search, User, Users, Calculator, Bot, Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,6 +20,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { user, logout, isAdmin } = useAuth();
 
   const navItems = [
     { path: '/', icon: MapPin, label: 'Map' },
@@ -18,6 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
     { path: '/business', icon: Calculator, label: 'Business' },
     { path: '/ai-chat', icon: Bot, label: 'AI Chat' },
     { path: '/community', icon: Users, label: 'Community' },
+    ...(isAdmin ? [{ path: '/admin', icon: Shield, label: 'Admin' }] : []),
     { path: '/profile', icon: User, label: 'Profile' }
   ];
 
@@ -36,7 +47,7 @@ const Layout = ({ children }: LayoutProps) => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-1">
-              {navItems.map((item) => {
+              {navItems.slice(0, -1).map((item) => {
                 const Icon = item.icon;
                 const isActive = currentPath === item.path;
                 return (
@@ -56,9 +67,48 @@ const Layout = ({ children }: LayoutProps) => {
               })}
             </nav>
 
-            <Button variant="outline" className="hidden md:flex">
-              Sign In
-            </Button>
+            {/* User Menu */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="flex items-center space-x-2">
+                    <User className="w-4 h-4" />
+                    <span className="hidden md:inline">{user.name}</span>
+                    {isAdmin && <Shield className="w-4 h-4 text-blue-600" />}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>
+                    {user.name}
+                    {isAdmin && <div className="text-xs text-blue-600">Administrator</div>}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center">
+                      <User className="w-4 h-4 mr-2" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="flex items-center">
+                        <Shield className="w-4 h-4 mr-2" />
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="outline">
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
       </header>
