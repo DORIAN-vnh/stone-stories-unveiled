@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import Community from "./pages/Community";
+import Business from "./pages/Business";
+import AiChat from "./pages/AiChat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +23,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/business" element={<Business />} />
+          <Route path="/ai-chat" element={<AiChat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/community" element={<Community />} />
           <Route path="*" element={<NotFound />} />

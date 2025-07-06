@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MapPin, Search, User, Users } from 'lucide-react';
+import { MapPin, Search, User, Users, Calculator, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface LayoutProps {
@@ -15,8 +15,10 @@ const Layout = ({ children }: LayoutProps) => {
   const navItems = [
     { path: '/', icon: MapPin, label: 'Map' },
     { path: '/search', icon: Search, label: 'Search' },
-    { path: '/profile', icon: User, label: 'Profile' },
-    { path: '/community', icon: Users, label: 'Community' }
+    { path: '/business', icon: Calculator, label: 'Business' },
+    { path: '/ai-chat', icon: Bot, label: 'AI Chat' },
+    { path: '/community', icon: Users, label: 'Community' },
+    { path: '/profile', icon: User, label: 'Profile' }
   ];
 
   return (
@@ -67,23 +69,23 @@ const Layout = ({ children }: LayoutProps) => {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-4 py-2">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-2 py-2">
         <div className="flex justify-around">
-          {navItems.map((item) => {
+          {navItems.slice(0, 5).map((item) => {
             const Icon = item.icon;
             const isActive = currentPath === item.path;
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors min-w-0 ${
                   isActive
                     ? 'text-stone-800'
                     : 'text-stone-500'
                 }`}
               >
-                <Icon className={`w-6 h-6 ${isActive ? 'text-stone-800' : 'text-stone-500'}`} />
-                <span className="text-xs font-medium">{item.label}</span>
+                <Icon className={`w-5 h-5 ${isActive ? 'text-stone-800' : 'text-stone-500'}`} />
+                <span className="text-xs font-medium truncate">{item.label}</span>
               </Link>
             );
           })}

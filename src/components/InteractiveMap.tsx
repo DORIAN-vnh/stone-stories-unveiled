@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -101,8 +101,6 @@ const InteractiveMap = () => {
     filter === 'all' || location.type === filter
   );
 
-  console.log('Map would be initialized here with locations:', filteredLocations);
-
   return (
     <div className="relative w-full h-full">
       {/* Filter Controls */}
@@ -153,57 +151,37 @@ const InteractiveMap = () => {
         </Button>
       </div>
 
-      {/* Map Placeholder */}
-      <div className="w-full h-full bg-stone-100 rounded-lg flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <MapPin className="w-16 h-16 text-stone-400 mx-auto" />
-          <div>
-            <p className="text-stone-600 font-medium">Interactive Map</p>
-            <p className="text-stone-500 text-sm">
-              Showing {filteredLocations.length} locations
-            </p>
-          </div>
-          
-          {/* Location Cards for demonstration */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
-            {filteredLocations.map((location) => {
-              const IconComponent = getIconForType(location.type);
-              return (
-                <Card key={location.id} className="cursor-pointer hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <IconComponent className="w-5 h-5" />
-                        {location.name}
-                      </CardTitle>
-                      <Badge variant="secondary" className={`${getColorForType(location.type)} text-white`}>
-                        {location.type}
-                      </Badge>
-                    </div>
-                    <CardDescription>{location.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {location.material && (
-                        <p className="text-sm"><strong>Material:</strong> {location.material}</p>
-                      )}
-                      {location.era && (
-                        <p className="text-sm"><strong>Era:</strong> {location.era}</p>
-                      )}
-                      {location.company && (
-                        <p className="text-sm"><strong>Info:</strong> {location.company}</p>
-                      )}
-                      <p className="text-xs text-stone-500">
-                        Coordinates: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      {/* Real Map */}
+      <MapContainer
+        center={[45.0, 10.0]}
+        zoom={6}
+        style={{ height: '100%', width: '100%' }}
+        className="rounded-lg"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {filteredLocations.map((location) => (
+          <Marker
+            key={location.id}
+            position={[location.lat, location.lng]}
+            eventHandlers={{
+              click: () => setSelectedLocation(location),
+            }}
+          >
+            <Popup>
+              <div className="p-2">
+                <h3 className="font-semibold">{location.name}</h3>
+                <p className="text-sm text-gray-600">{location.description}</p>
+                {location.material && (
+                  <p className="text-sm mt-1"><strong>Material:</strong> {location.material}</p>
+                )}
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
 
       {/* Selected Location Details */}
       {selectedLocation && (
