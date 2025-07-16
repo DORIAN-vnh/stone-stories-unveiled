@@ -143,7 +143,10 @@ const Events = () => {
             <h1 className="text-3xl font-bold text-stone-800 mb-2">Events</h1>
             <p className="text-stone-600">Discover and join stone heritage events worldwide</p>
           </div>
-          <Button className="flex items-center gap-2">
+          <Button 
+            className="flex items-center gap-2"
+            onClick={() => window.location.href = '/events/create'}
+          >
             <Plus className="w-4 h-4" />
             Create Event
           </Button>

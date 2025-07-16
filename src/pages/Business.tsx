@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calculator, TrendingUp, Package, DollarSign, Truck, BarChart3 } from 'lucide-react';
+import { Calculator, TrendingUp, Package, DollarSign, Truck, BarChart3, Building2, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Business = () => {
   const [volumeCalc, setVolumeCalc] = useState({
@@ -59,6 +60,19 @@ const Business = () => {
       title: 'Market Analysis',
       description: 'Track stone prices and market trends',
       color: 'bg-purple-100 text-purple-600'
+    },
+    {
+      icon: Building2,
+      title: 'Business Directory',
+      description: 'Find trusted partners and service providers',
+      color: 'bg-indigo-100 text-indigo-600',
+      link: '/business-directory'
+    },
+    {
+      icon: Users,
+      title: 'Professional Network',
+      description: 'Connect with industry professionals',
+      color: 'bg-teal-100 text-teal-600'
     }
   ];
 
@@ -82,11 +96,27 @@ const Business = () => {
         </div>
 
         {/* Tools Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {tools.map((tool, index) => {
             const Icon = tool.icon;
             return (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+              <div key={index}>
+                {tool.link ? (
+                <Link to={tool.link}>
+                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardHeader className="text-center">
+                      <div className={`w-12 h-12 rounded-lg ${tool.color} flex items-center justify-center mx-auto mb-4`}>
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <CardTitle className="text-lg">{tool.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                      <p className="text-stone-600 text-sm">{tool.description}</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ) : (
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardHeader className="text-center">
                   <div className={`w-12 h-12 rounded-lg ${tool.color} flex items-center justify-center mx-auto mb-4`}>
                     <Icon className="w-6 h-6" />
@@ -97,6 +127,8 @@ const Business = () => {
                   <p className="text-stone-600 text-sm">{tool.description}</p>
                 </CardContent>
               </Card>
+              )}
+              </div>
             );
           })}
         </div>

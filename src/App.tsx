@@ -10,6 +10,7 @@ import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import Community from "./pages/Community";
 import Business from "./pages/Business";
+import BusinessDirectory from "./pages/BusinessDirectory";
 import AiChat from "./pages/AiChat";
 import Admin from "./pages/Admin";
 import Company from "./pages/Company";
@@ -23,6 +24,7 @@ import Events from "./pages/Events";
 import Contributors from "./pages/Contributors";
 import PostDetail from "./pages/PostDetail";
 import CreateDiscussion from "./pages/CreateDiscussion";
+import CreateEvent from "./pages/CreateEvent";
 import CreateContent from "./pages/CreateContent";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +41,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/search" element={<Search />} />
             <Route path="/business" element={<Business />} />
+            <Route path="/business-directory" element={<BusinessDirectory />} />
             <Route path="/ai-chat" element={<AiChat />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/community" element={<Community />} />
@@ -51,6 +54,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
         <Route path="/discussions" element={<Discussions />} />
         <Route path="/discussions/new" element={<CreateDiscussion />} />
+        <Route path="/events/create" element={<CreateEvent />} />
         <Route path="/create-content" element={<CreateContent />} />
         <Route path="/events" element={<Events />} />
         <Route path="/contributors" element={<Contributors />} />
