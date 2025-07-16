@@ -105,11 +105,18 @@ const Layout = ({ children }: LayoutProps) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link to="/signin">
-                <Button variant="outline">
-                  Sign In
-                </Button>
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link to="/signin">
+                  <Button variant="outline">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button>
+                    Join Now
+                  </Button>
+                </Link>
+              </div>
             )}
           </div>
         </div>

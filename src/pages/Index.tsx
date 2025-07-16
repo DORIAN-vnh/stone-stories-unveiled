@@ -1,110 +1,195 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '@/components/Layout';
 import InteractiveMap from '@/components/InteractiveMap';
-import DiscoveryFeed from '@/components/DiscoveryFeed';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, Image, BookOpen, Users } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { MapPin, Users, Calendar, TrendingUp, Search, Bot, Building2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'map' | 'feed'>('map');
+  const { user } = useAuth();
+
+  const features = [
+    {
+      icon: MapPin,
+      title: 'Interactive Map',
+      description: 'Explore stone heritage sites, quarries, and monuments worldwide',
+      link: '/',
+      color: 'bg-blue-100 text-blue-600'
+    },
+    {
+      icon: Search,
+      title: 'Advanced Search',
+      description: 'Find specific stone types, locations, and heritage sites',
+      link: '/search',
+      color: 'bg-green-100 text-green-600'
+    },
+    {
+      icon: Bot,
+      title: 'AI Assistant',
+      description: 'Get expert advice on stone identification and conservation',
+      link: '/ai-chat',
+      color: 'bg-purple-100 text-purple-600'
+    },
+    {
+      icon: Users,
+      title: 'Community',
+      description: 'Connect with stone heritage experts and enthusiasts',
+      link: '/community',
+      color: 'bg-orange-100 text-orange-600'
+    }
+  ];
 
   const stats = [
-    { icon: MapPin, label: 'Historic Sites', value: '2,847', color: 'text-stone-600' },
-    { icon: Image, label: 'Quarries', value: '1,203', color: 'text-quarry-600' },
-    { icon: BookOpen, label: 'Articles', value: '856', color: 'text-stone-500' },
-    { icon: Users, label: 'Contributors', value: '12,450', color: 'text-stone-700' }
+    { label: 'Heritage Sites', value: '2,450+', icon: Building2 },
+    { label: 'Active Members', value: '12,450', icon: Users },
+    { label: 'Countries', value: '89', icon: MapPin },
+    { label: 'Discussions', value: '347', icon: TrendingUp }
   ];
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-stone-800 mb-4">
-            Discover the World of 
-            <span className="block text-quarry-600">Historic Stone</span>
-          </h1>
-          <p className="text-xl text-stone-600 max-w-3xl mx-auto mb-8">
-            Explore monuments, quarries, and marble varieties from around the globe. 
-            Connect with experts and contribute to our growing knowledge base.
-          </p>
+      <div className="min-h-screen bg-stone-50">
+        {/* Hero Section with Map */}
+        <div className="relative h-screen">
+          <InteractiveMap />
           
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <Card key={index} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4 text-center">
-                    <Icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
-                    <div className="text-2xl font-bold text-stone-800">{stat.value}</div>
-                    <div className="text-sm text-stone-600">{stat.label}</div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+          {/* Overlay Content */}
+          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <div className="text-center text-white px-4 max-w-4xl mx-auto">
+              <h1 className="text-5xl md:text-7xl font-bold mb-6">
+                Discover Stone Heritage
+              </h1>
+              <p className="text-xl md:text-2xl mb-8 text-white/90">
+                Explore the world's most precious stone monuments, quarries, and heritage sites
+              </p>
+              {!user ? (
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/register">
+                    <Button size="lg" className="bg-quarry-600 hover:bg-quarry-700 text-white px-8 py-4 text-lg">
+                      Join Our Community
+                    </Button>
+                  </Link>
+                  <Link to="/search">
+                    <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 px-8 py-4 text-lg">
+                      Explore Now
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/search">
+                    <Button size="lg" className="bg-quarry-600 hover:bg-quarry-700 text-white px-8 py-4 text-lg">
+                      Start Exploring
+                    </Button>
+                  </Link>
+                  <Link to="/ai-chat">
+                    <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 px-8 py-4 text-lg">
+                      Ask AI Assistant
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-white rounded-lg p-1 shadow-sm border border-stone-200">
-            <Button
-              variant={activeView === 'map' ? 'default' : 'ghost'}
-              onClick={() => setActiveView('map')}
-              className="px-6"
-            >
-              <MapPin className="w-4 h-4 mr-2" />
-              Map View
-            </Button>
-            <Button
-              variant={activeView === 'feed' ? 'default' : 'ghost'}
-              onClick={() => setActiveView('feed')}
-              className="px-6"
-            >
-              <Image className="w-4 h-4 mr-2" />
-              Discovery Feed
-            </Button>
+        {/* Features Section */}
+        <div className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-stone-800 mb-4">
+                Powerful Tools for Stone Heritage
+              </h2>
+              <p className="text-xl text-stone-600 max-w-3xl mx-auto">
+                Our platform combines cutting-edge technology with expert knowledge to help you explore, 
+                learn, and contribute to stone heritage preservation.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {features.map((feature, index) => {
+                const Icon = feature.icon;
+                return (
+                  <Link key={index} to={feature.link}>
+                    <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                      <CardHeader>
+                        <div className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mb-4`}>
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <CardTitle className="text-lg">{feature.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-stone-600">{feature.description}</p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="min-h-[600px]">
-          {activeView === 'map' ? (
-            <div className="h-[600px] rounded-lg overflow-hidden shadow-lg">
-              <InteractiveMap />
+        {/* Stats Section */}
+        <div className="py-16 bg-quarry-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-stone-800 mb-4">
+                Global Stone Heritage Network
+              </h2>
+              <p className="text-xl text-stone-600">
+                Join thousands of experts and enthusiasts preserving our stone heritage
+              </p>
             </div>
-          ) : (
-            <div className="max-w-2xl mx-auto">
-              <DiscoveryFeed />
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 bg-quarry-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-8 h-8 text-quarry-600" />
+                    </div>
+                    <div className="text-3xl font-bold text-stone-800 mb-2">{stat.value}</div>
+                    <div className="text-stone-600">{stat.label}</div>
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </div>
         </div>
 
         {/* CTA Section */}
-        <div className="mt-16 text-center">
-          <Card className="stone-gradient border-stone-200">
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-bold text-stone-800 mb-4">
-                Join Our Community of Stone Enthusiasts
-              </h2>
-              <p className="text-stone-600 mb-6 max-w-2xl mx-auto">
-                Share your discoveries, connect with experts, and help preserve the knowledge 
-                of historical stone materials for future generations.
-              </p>
-              <div className="space-x-4">
-                <Button size="lg" className="bg-stone-700 hover:bg-stone-800">
-                  Create Account
-                </Button>
-                <Button variant="outline" size="lg">
-                  Learn More
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {!user && (
+          <div className="py-16 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <Card className="quarry-gradient p-8">
+                <h2 className="text-3xl font-bold text-stone-800 mb-4">
+                  Ready to Join Our Community?
+                </h2>
+                <p className="text-xl text-stone-600 mb-8">
+                  Connect with stone heritage experts, access exclusive resources, 
+                  and contribute to preserving our cultural heritage.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/register">
+                    <Button size="lg" className="bg-quarry-600 hover:bg-quarry-700 text-white px-8 py-4">
+                      Create Free Account
+                    </Button>
+                  </Link>
+                  <Link to="/community">
+                    <Button size="lg" variant="outline" className="px-8 py-4">
+                      Explore Community
+                    </Button>
+                  </Link>
+                </div>
+              </Card>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );

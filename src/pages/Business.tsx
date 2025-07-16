@@ -1,326 +1,314 @@
 
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Calculator, FileText, MessageSquare, TrendingUp, Building2, Package } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calculator, TrendingUp, Package, DollarSign, Truck, BarChart3 } from 'lucide-react';
 
 const Business = () => {
-  const [calculatorValues, setCalculatorValues] = useState({
+  const [volumeCalc, setVolumeCalc] = useState({
     length: '',
     width: '',
-    thickness: '',
-    material: 'marble'
+    height: '',
+    unit: 'meters',
+    result: 0
   });
 
-  const [quoteForm, setQuoteForm] = useState({
-    projectType: '',
-    material: '',
-    quantity: '',
-    location: '',
-    description: ''
+  const [costCalc, setCostCalc] = useState({
+    volume: '',
+    pricePerUnit: '',
+    unit: 'cubic_meter',
+    result: 0
   });
 
-  const materials = [
-    { name: 'Marble', price: 150, unit: 'sq ft' },
-    { name: 'Granite', price: 120, unit: 'sq ft' },
-    { name: 'Limestone', price: 80, unit: 'sq ft' },
-    { name: 'Sandstone', price: 70, unit: 'sq ft' }
-  ];
+  const calculateVolume = () => {
+    const volume = parseFloat(volumeCalc.length) * parseFloat(volumeCalc.width) * parseFloat(volumeCalc.height);
+    setVolumeCalc(prev => ({ ...prev, result: volume || 0 }));
+  };
 
   const calculateCost = () => {
-    const length = parseFloat(calculatorValues.length);
-    const width = parseFloat(calculatorValues.width);
-    const material = materials.find(m => m.name.toLowerCase() === calculatorValues.material);
-    
-    if (length && width && material) {
-      const area = length * width;
-      const cost = area * material.price;
-      return { area, cost, material };
+    const total = parseFloat(costCalc.volume) * parseFloat(costCalc.pricePerUnit);
+    setCostCalc(prev => ({ ...prev, result: total || 0 }));
+  };
+
+  const tools = [
+    {
+      icon: Calculator,
+      title: 'Volume Calculator',
+      description: 'Calculate stone block volumes for quarrying and construction',
+      color: 'bg-blue-100 text-blue-600'
+    },
+    {
+      icon: DollarSign,
+      title: 'Cost Estimator',
+      description: 'Estimate project costs based on stone type and quantity',
+      color: 'bg-green-100 text-green-600'
+    },
+    {
+      icon: Truck,
+      title: 'Shipping Calculator',
+      description: 'Calculate transportation costs and logistics',
+      color: 'bg-orange-100 text-orange-600'
+    },
+    {
+      icon: BarChart3,
+      title: 'Market Analysis',
+      description: 'Track stone prices and market trends',
+      color: 'bg-purple-100 text-purple-600'
     }
-    return null;
-  };
+  ];
 
-  const handleQuoteSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Quote Request Submitted",
-      description: "We'll get back to you within 24 hours with a detailed quote.",
-    });
-    setQuoteForm({
-      projectType: '',
-      material: '',
-      quantity: '',
-      location: '',
-      description: ''
-    });
-  };
-
-  const calculation = calculateCost();
+  const marketData = [
+    { stone: 'Carrara Marble', price: '$450/m³', trend: '+5.2%', color: 'text-green-600' },
+    { stone: 'Granite', price: '$280/m³', trend: '+2.1%', color: 'text-green-600' },
+    { stone: 'Limestone', price: '$180/m³', trend: '-1.5%', color: 'text-red-600' },
+    { stone: 'Travertine', price: '$320/m³', trend: '+3.8%', color: 'text-green-600' },
+    { stone: 'Slate', price: '$220/m³', trend: '+0.9%', color: 'text-green-600' }
+  ];
 
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-stone-800 mb-4">Business Center</h1>
-          <p className="text-xl text-stone-600">Professional tools for stone industry professionals</p>
+          <h1 className="text-3xl font-bold text-stone-800 mb-4">Business Tools</h1>
+          <p className="text-stone-600 max-w-2xl mx-auto">
+            Professional tools for stone industry professionals, quarry masters, and construction companies
+          </p>
         </div>
 
-        <Tabs defaultValue="calculator" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 max-w-2xl mx-auto">
-            <TabsTrigger value="calculator" className="flex items-center gap-2">
-              <Calculator className="w-4 h-4" />
-              Calculator
-            </TabsTrigger>
-            <TabsTrigger value="quotes" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              Quotes
-            </TabsTrigger>
-            <TabsTrigger value="inquiries" className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4" />
-              Inquiries
-            </TabsTrigger>
-            <TabsTrigger value="dashboard" className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              Dashboard
-            </TabsTrigger>
-          </TabsList>
+        {/* Tools Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {tools.map((tool, index) => {
+            const Icon = tool.icon;
+            return (
+              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader className="text-center">
+                  <div className={`w-12 h-12 rounded-lg ${tool.color} flex items-center justify-center mx-auto mb-4`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <CardTitle className="text-lg">{tool.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-stone-600 text-sm">{tool.description}</p>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
 
-          <TabsContent value="calculator" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calculator className="w-5 h-5" />
-                  Stone Cost Calculator
-                </CardTitle>
-                <CardDescription>
-                  Calculate material costs for your stone projects
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="length">Length (ft)</Label>
-                    <Input
-                      id="length"
-                      type="number"
-                      value={calculatorValues.length}
-                      onChange={(e) => setCalculatorValues(prev => ({ ...prev, length: e.target.value }))}
-                      placeholder="10"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="width">Width (ft)</Label>
-                    <Input
-                      id="width"
-                      type="number"
-                      value={calculatorValues.width}
-                      onChange={(e) => setCalculatorValues(prev => ({ ...prev, width: e.target.value }))}
-                      placeholder="8"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="material">Material</Label>
-                    <Select value={calculatorValues.material} onValueChange={(value) => setCalculatorValues(prev => ({ ...prev, material: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {materials.map((material) => (
-                          <SelectItem key={material.name.toLowerCase()} value={material.name.toLowerCase()}>
-                            {material.name} - ${material.price}/{material.unit}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Calculators */}
+          <div className="lg:col-span-2">
+            <Tabs defaultValue="volume" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="volume">Volume</TabsTrigger>
+                <TabsTrigger value="cost">Cost</TabsTrigger>
+                <TabsTrigger value="shipping">Shipping</TabsTrigger>
+                <TabsTrigger value="weight">Weight</TabsTrigger>
+              </TabsList>
 
-                {calculation && (
-                  <div className="mt-6 p-4 bg-stone-50 rounded-lg">
-                    <h3 className="font-semibold text-stone-800 mb-2">Calculation Results</h3>
-                    <div className="grid grid-cols-3 gap-4 text-sm">
+              <TabsContent value="volume">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Calculator className="w-5 h-5 mr-2" />
+                      Volume Calculator
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div>
-                        <p className="text-stone-600">Total Area</p>
-                        <p className="font-semibold">{calculation.area} sq ft</p>
+                        <Label htmlFor="length">Length</Label>
+                        <Input
+                          id="length"
+                          type="number"
+                          value={volumeCalc.length}
+                          onChange={(e) => setVolumeCalc(prev => ({ ...prev, length: e.target.value }))}
+                          placeholder="0"
+                        />
                       </div>
                       <div>
-                        <p className="text-stone-600">Material</p>
-                        <p className="font-semibold">{calculation.material.name}</p>
+                        <Label htmlFor="width">Width</Label>
+                        <Input
+                          id="width"
+                          type="number"
+                          value={volumeCalc.width}
+                          onChange={(e) => setVolumeCalc(prev => ({ ...prev, width: e.target.value }))}
+                          placeholder="0"
+                        />
                       </div>
                       <div>
-                        <p className="text-stone-600">Estimated Cost</p>
-                        <p className="font-semibold text-green-600">${calculation.cost.toLocaleString()}</p>
+                        <Label htmlFor="height">Height</Label>
+                        <Input
+                          id="height"
+                          type="number"
+                          value={volumeCalc.height}
+                          onChange={(e) => setVolumeCalc(prev => ({ ...prev, height: e.target.value }))}
+                          placeholder="0"
+                        />
                       </div>
                     </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    <div>
+                      <Label>Unit</Label>
+                      <Select value={volumeCalc.unit} onValueChange={(value) => setVolumeCalc(prev => ({ ...prev, unit: value }))}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="meters">Meters</SelectItem>
+                          <SelectItem value="feet">Feet</SelectItem>
+                          <SelectItem value="inches">Inches</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={calculateVolume} className="w-full">
+                      Calculate Volume
+                    </Button>
+                    {volumeCalc.result > 0 && (
+                      <div className="p-4 bg-green-50 rounded-lg">
+                        <p className="text-lg font-semibold text-green-800">
+                          Volume: {volumeCalc.result.toFixed(2)} {volumeCalc.unit === 'meters' ? 'm³' : volumeCalc.unit === 'feet' ? 'ft³' : 'in³'}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
-          <TabsContent value="quotes" className="space-y-6">
+              <TabsContent value="cost">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <DollarSign className="w-5 h-5 mr-2" />
+                      Cost Calculator
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label htmlFor="volume">Volume</Label>
+                      <Input
+                        id="volume"
+                        type="number"
+                        value={costCalc.volume}
+                        onChange={(e) => setCostCalc(prev => ({ ...prev, volume: e.target.value }))}
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="price">Price per Unit</Label>
+                      <Input
+                        id="price"
+                        type="number"
+                        value={costCalc.pricePerUnit}
+                        onChange={(e) => setCostCalc(prev => ({ ...prev, pricePerUnit: e.target.value }))}
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label>Unit</Label>
+                      <Select value={costCalc.unit} onValueChange={(value) => setCostCalc(prev => ({ ...prev, unit: value }))}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="cubic_meter">Per Cubic Meter</SelectItem>
+                          <SelectItem value="cubic_foot">Per Cubic Foot</SelectItem>
+                          <SelectItem value="ton">Per Ton</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={calculateCost} className="w-full">
+                      Calculate Cost
+                    </Button>
+                    {costCalc.result > 0 && (
+                      <div className="p-4 bg-green-50 rounded-lg">
+                        <p className="text-lg font-semibold text-green-800">
+                          Total Cost: ${costCalc.result.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="shipping">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Truck className="w-5 h-5 mr-2" />
+                      Shipping Calculator
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-stone-600 text-center py-8">
+                      Shipping calculator coming soon. Contact our logistics team for quotes.
+                    </p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="weight">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Package className="w-5 h-5 mr-2" />
+                      Weight Calculator
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-stone-600 text-center py-8">
+                      Weight calculator based on stone density coming soon.
+                    </p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Market Data */}
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Request Quote</CardTitle>
-                <CardDescription>Get professional quotes for your stone projects</CardDescription>
+                <CardTitle className="flex items-center">
+                  <TrendingUp className="w-5 h-5 mr-2" />
+                  Market Prices
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleQuoteSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="projectType">Project Type</Label>
-                      <Select value={quoteForm.projectType} onValueChange={(value) => setQuoteForm(prev => ({ ...prev, projectType: value }))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select project type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="construction">Construction</SelectItem>
-                          <SelectItem value="renovation">Renovation</SelectItem>
-                          <SelectItem value="restoration">Restoration</SelectItem>
-                          <SelectItem value="landscaping">Landscaping</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="material">Material Needed</Label>
-                      <Select value={quoteForm.material} onValueChange={(value) => setQuoteForm(prev => ({ ...prev, material: value }))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select material" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="marble">Marble</SelectItem>
-                          <SelectItem value="granite">Granite</SelectItem>
-                          <SelectItem value="limestone">Limestone</SelectItem>
-                          <SelectItem value="sandstone">Sandstone</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="quantity">Quantity</Label>
-                      <Input
-                        id="quantity"
-                        value={quoteForm.quantity}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, quantity: e.target.value }))}
-                        placeholder="e.g., 100 sq ft"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="location">Project Location</Label>
-                      <Input
-                        id="location"
-                        value={quoteForm.location}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, location: e.target.value }))}
-                        placeholder="City, State"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="description">Project Description</Label>
-                    <Textarea
-                      id="description"
-                      value={quoteForm.description}
-                      onChange={(e) => setQuoteForm(prev => ({ ...prev, description: e.target.value }))}
-                      placeholder="Describe your project requirements..."
-                      rows={4}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
-                    Request Quote
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="inquiries" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Inquiries</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {[
-                    { id: 1, type: 'Quote', material: 'Marble', status: 'Pending', date: '2024-01-15' },
-                    { id: 2, type: 'Consultation', material: 'Granite', status: 'Completed', date: '2024-01-14' },
-                    { id: 3, type: 'Quote', material: 'Limestone', status: 'In Progress', date: '2024-01-13' }
-                  ].map((inquiry) => (
-                    <div key={inquiry.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="space-y-4">
+                  {marketData.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center p-3 rounded-lg hover:bg-stone-50">
                       <div>
-                        <p className="font-medium">{inquiry.type} - {inquiry.material}</p>
-                        <p className="text-sm text-stone-600">{inquiry.date}</p>
+                        <h4 className="font-medium text-stone-800">{item.stone}</h4>
+                        <p className="text-sm text-stone-500">{item.price}</p>
                       </div>
-                      <Badge variant={inquiry.status === 'Completed' ? 'default' : 'secondary'}>
-                        {inquiry.status}
-                      </Badge>
+                      <div className={`text-sm font-medium ${item.color}`}>
+                        {item.trend}
+                      </div>
                     </div>
                   ))}
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Building2 className="w-4 h-4 mr-2" />
-                    Find Suppliers
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Package className="w-4 h-4 mr-2" />
-                    Track Orders
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <MessageSquare className="w-4 h-4 mr-2" />
-                    Contact Support
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="dashboard" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Total Projects</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-stone-800">24</div>
-                  <p className="text-sm text-stone-600">+12% from last month</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Active Quotes</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-stone-800">8</div>
-                  <p className="text-sm text-stone-600">3 pending responses</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Revenue</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-green-600">$45,200</div>
-                  <p className="text-sm text-stone-600">This quarter</p>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
+            <Card className="quarry-gradient">
+              <CardContent className="p-6 text-center">
+                <h3 className="font-bold text-stone-800 mb-2">Need Custom Quotes?</h3>
+                <p className="text-stone-600 text-sm mb-4">
+                  Get personalized pricing for your stone projects from verified suppliers.
+                </p>
+                <Button className="w-full bg-quarry-600 hover:bg-quarry-700">
+                  Request Quote
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </Layout>
   );
