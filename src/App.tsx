@@ -22,6 +22,8 @@ import Discussions from "./pages/Discussions";
 import Events from "./pages/Events";
 import Contributors from "./pages/Contributors";
 import PostDetail from "./pages/PostDetail";
+import CreateDiscussion from "./pages/CreateDiscussion";
+import CreateContent from "./pages/CreateContent";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,11 +49,13 @@ const App = () => (
             <Route path="/marble/:id" element={<Marble />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/discussions" element={<Discussions />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/contributors" element={<Contributors />} />
-            <Route path="/post/:id" element={<PostDetail />} />
-            <Route path="*" element={<NotFound />} />
+        <Route path="/discussions" element={<Discussions />} />
+        <Route path="/discussions/new" element={<CreateDiscussion />} />
+        <Route path="/create-content" element={<CreateContent />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/contributors" element={<Contributors />} />
+        <Route path="/post/:id" element={<PostDetail />} />
+        <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

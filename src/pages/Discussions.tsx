@@ -108,7 +108,10 @@ const Discussions = () => {
             <h1 className="text-3xl font-bold text-stone-800 mb-2">Discussions</h1>
             <p className="text-stone-600">Join conversations with the stone heritage community</p>
           </div>
-          <Button className="flex items-center gap-2">
+          <Button 
+            className="flex items-center gap-2"
+            onClick={() => window.location.href = '/discussions/new'}
+          >
             <Plus className="w-4 h-4" />
             New Discussion
           </Button>
@@ -161,7 +164,11 @@ const Discussions = () => {
 
               <TabsContent value="latest" className="space-y-4 mt-6">
                 {filteredDiscussions.map((discussion) => (
-                  <Card key={discussion.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                  <Card 
+                    key={discussion.id} 
+                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => window.location.href = `/post/${discussion.id}`}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-start space-x-4">
                         <Avatar className="w-12 h-12">

@@ -120,7 +120,11 @@ const DiscoveryFeed = () => {
                     {item.likes}
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => window.location.href = `/post/${item.id}`}
+                >
                   Read More
                 </Button>
               </div>

@@ -22,9 +22,11 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const Admin = () => {
   const { isAdmin } = useAuth();
+  const { toast } = useToast();
   const [selectedTab, setSelectedTab] = useState('overview');
 
   if (!isAdmin) {
@@ -117,7 +119,7 @@ const Admin = () => {
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>
-            <Button>
+            <Button onClick={() => window.location.href = '/create-content'}>
               <Plus className="w-4 h-4 mr-2" />
               Add Content
             </Button>
@@ -182,13 +184,36 @@ const Admin = () => {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => window.location.href = `/post/${item.id}`}
+                          >
                             <Eye className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => {
+                              toast({
+                                title: "Content Approved",
+                                description: `${item.title} has been approved and published.`,
+                              });
+                            }}
+                          >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => {
+                              toast({
+                                title: "Content Rejected",
+                                description: `${item.title} has been rejected.`,
+                                variant: "destructive"
+                              });
+                            }}
+                          >
                             <XCircle className="w-4 h-4" />
                           </Button>
                         </div>
